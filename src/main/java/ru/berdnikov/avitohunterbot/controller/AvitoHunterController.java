@@ -1,67 +1,67 @@
 package ru.berdnikov.avitohunterbot.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.berdnikov.avitohunterbot.config.AvitoHunterTelegramPollingBot;
-import ru.berdnikov.avitohunterbot.config.UpdateListener;
+import ru.berdnikov.avitohunterbot.config.BotCommands;
+import ru.berdnikov.avitohunterbot.config.BotConfig;
 import ru.berdnikov.avitohunterbot.service.CommandBotService;
 import ru.berdnikov.avitohunterbot.service.InfoService;
 
 @Component
-public class AvitoHunterController implements UpdateListener {
-    private final AvitoHunterTelegramPollingBot avitoHunterTelegramPollingBot;
+@RequiredArgsConstructor
+public class AvitoHunterController extends TelegramLongPollingBot {
     private final CommandBotService commandBotService;
     private final InfoService infoService;
+    private final BotConfig botConfig;
 
-
-    @Autowired
-    public AvitoHunterController(AvitoHunterTelegramPollingBot avitoHunterTelegramPollingBot, CommandBotService commandBotService, InfoService infoService) {
-        this.avitoHunterTelegramPollingBot = avitoHunterTelegramPollingBot;
-        this.commandBotService = commandBotService;
-        this.infoService = infoService;
-        avitoHunterTelegramPollingBot.registerUpdateListener(this);
+    @Override
+    public String getBotUsername() {
+        return botConfig.botName;
+    }
+    @Override
+    public String getBotToken() {
+        return botConfig.getToken();
     }
 
     @Override
     public void onUpdateReceived(Update update) {
-        long profileId;
-        String receivedMessage;
         try {
             if (update.hasMessage() && update.getMessage().hasText()) {
-                profileId = update.getMessage().getChatId();
-                receivedMessage = update.getMessage().getText();
-                avitoHunterTelegramPollingBot.execute(processCommand(profileId, receivedMessage));
+                long profileId = update.getMessage().getChatId();
+                String receivedMessage = update.getMessage().getText();
+                execute(processCommand(profileId, receivedMessage));
             } else if (update.hasCallbackQuery()) {
-                profileId = update.getCallbackQuery().getMessage().getChatId();
-                receivedMessage = update.getCallbackQuery().getData();
-                avitoHunterTelegramPollingBot.execute(processCommand(profileId, receivedMessage));
+                long profileId = update.getCallbackQuery().getMessage().getChatId();
+                String receivedMessage = update.getCallbackQuery().getData();
+                execute(processCommand(profileId, receivedMessage));
             }
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private SendMessage processCommand(long profileId, String receivedMessage) throws TelegramApiException {
+    private SendMessage processCommand(long profileId, String receivedMessage) {
         switch (receivedMessage) {
-            case "/hello" -> {
+            case BotCommands.HELLO_COMMAND -> {
                 return infoService.sayHello(profileId);
             }
-            case "/link" -> {
+            case BotCommands.LINK_COMMAND -> {
                 return commandBotService.listOfLinks(profileId);
             }
-            case "/add" -> {
+            case BotCommands.ADD_COMMAND -> {
                 return infoService.addLinkInfo(profileId);
             }
-            case "/delete" -> {
+            case BotCommands.DELETE_COMMAND -> {
                 return infoService.deleteLinkInfo(profileId);
             }
-            case "/go" -> {
-                return commandBotService.startSearchLinks(profileId, avitoHunterTelegramPollingBot);
-            }
-            case "/stop" -> {
+//            case "/go" -> {
+//                return commandBotService.startSearchLinks(profileId, this);
+//            }
+            case BotCommands.STOP_COMMAND -> {
                 return commandBotService.stopSearchLinks(profileId);
             }
             default -> {

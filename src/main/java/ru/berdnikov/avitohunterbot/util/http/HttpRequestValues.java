@@ -1,7 +1,7 @@
 package ru.berdnikov.avitohunterbot.util.http;
 
 public enum HttpRequestValues {
-    AVITO_URL(
+    AVITO_REQUEST_VALUES(
             "div.iva-item-title-py3i_",
             "div.iva-item-title-py3i_ a",
             "div.price-price-JP7qe",

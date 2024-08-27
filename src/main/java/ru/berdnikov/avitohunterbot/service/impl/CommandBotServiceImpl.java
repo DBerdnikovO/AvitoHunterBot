@@ -3,7 +3,6 @@ package ru.berdnikov.avitohunterbot.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import ru.berdnikov.avitohunterbot.config.AvitoHunterTelegramPollingBot;
 import ru.berdnikov.avitohunterbot.entity.Link;
 import ru.berdnikov.avitohunterbot.service.*;
 import ru.berdnikov.avitohunterbot.util.errors.Errors;
@@ -47,14 +46,14 @@ public class CommandBotServiceImpl implements CommandBotService {
         return requestMessage(profileId, profileLinks(profileId));
     }
 
-    @Override
-    public SendMessage startSearchLinks(long profileId, AvitoHunterTelegramPollingBot avitoHunterTelegramPollingBot) {
-        SendMessage errorMessage = checkProfileAndLinks(profileId);
-        if (errorMessage != null) {
-            return errorMessage;
-        }
-        return requestMessage(profileId, taskService.startSearchTask(profileId, avitoHunterTelegramPollingBot));
-    }
+//    @Override
+//    public SendMessage startSearchLinks(long profileId, AvitoHunterTelegramPollingBot avitoHunterTelegramPollingBot) {
+//        SendMessage errorMessage = checkProfileAndLinks(profileId);
+//        if (errorMessage != null) {
+//            return errorMessage;
+//        }
+//        return requestMessage(profileId, taskService.startSearchTask(profileId, avitoHunterTelegramPollingBot));
+//    }
 
     @Override
     public SendMessage stopSearchLinks(long chatId) {
@@ -71,7 +70,7 @@ public class CommandBotServiceImpl implements CommandBotService {
         return null;
     }
 
-    private String profileLinks(long profileId){
+    private String profileLinks(long profileId) {
         List<Link> links = linkService.getLinksAsAList(profileId);
         StringBuilder messageBuilder = new StringBuilder();
         messageBuilder.append(Info.YOUR_LINKS);
