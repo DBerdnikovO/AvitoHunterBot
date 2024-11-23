@@ -2,7 +2,7 @@ version: "3.9"
 services:
   postgres:
     container_name: postgres_container
-    image: postgres:14.8-alpine3.18
+    image: postgres:15.0-alpine3.16
     command:
       - "postgres"
       - "-c"
@@ -55,9 +55,8 @@ services:
     container_name: pgadmin_container
     image: dpage/pgadmin4:7.2
     environment:
-      PGADMIN_DEFAULT_EMAIL: EMAIL
-      PGADMIN_DEFAULT_PASSWORD: "1122"
-      PGADMIN_CONFIG_SERVER_MODE: "False"
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
@@ -79,11 +78,10 @@ services:
     environment:
       - spring.application.name=YOUR_NAME
       - spring.datasource.driver-class-name=org.postgresql.Driver
-      - spring.datasource.url=YOUR_DB_URL
-      - spring.datasource.username=USER_NAME
-      - spring.datasource.password=PASSWORD
-      - bot.name=BOT_NAME
-      - bot.token=BOT_TOKEN
+      - spring.datasource.username=username
+      - spring.datasource.password=password
+      - bot.name=Avito_500_bot
+      - bot.token=6810055517:AAGp96KsTdJKQFzU50_eEEt8OktKt2xIL8Q
       - server.port=8081
     networks:
       - postgres

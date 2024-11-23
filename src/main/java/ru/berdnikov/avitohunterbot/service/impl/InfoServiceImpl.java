@@ -20,7 +20,7 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public SendMessage sayHello(long chatId) {
+    public SendMessage infoAboutBot(long chatId) {
         return requestMessage(chatId, Info.HELLO_STRING);
     }
 }

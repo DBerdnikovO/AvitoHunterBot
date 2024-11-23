@@ -7,5 +7,5 @@ public interface InfoService {
 
     SendMessage deleteLinkInfo(long profileId);
 
-    SendMessage sayHello(long profileId);
+    SendMessage infoAboutBot(long chatId);
 }

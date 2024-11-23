@@ -20,7 +20,7 @@ public class AvitoHunterController extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return botConfig.botName;
+        return botConfig.getBotName();
     }
     @Override
     public String getBotToken() {
@@ -46,8 +46,8 @@ public class AvitoHunterController extends TelegramLongPollingBot {
 
     private SendMessage processCommand(long profileId, String receivedMessage) {
         switch (receivedMessage) {
-            case BotCommands.HELLO_COMMAND -> {
-                return infoService.sayHello(profileId);
+            case BotCommands.INFO_COMMAND -> {
+                return infoService.infoAboutBot(profileId);
             }
             case BotCommands.LINK_COMMAND -> {
                 return commandBotService.listOfLinks(profileId);
@@ -58,9 +58,9 @@ public class AvitoHunterController extends TelegramLongPollingBot {
             case BotCommands.DELETE_COMMAND -> {
                 return infoService.deleteLinkInfo(profileId);
             }
-//            case "/go" -> {
-//                return commandBotService.startSearchLinks(profileId, this);
-//            }
+            case BotCommands.START_COMMAND -> {
+                return commandBotService.startSearchLinks(profileId, this);
+            }
             case BotCommands.STOP_COMMAND -> {
                 return commandBotService.stopSearchLinks(profileId);
             }
