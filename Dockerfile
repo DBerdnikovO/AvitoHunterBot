@@ -6,6 +6,4 @@ COPY ${JAR_FILE} application.jar
 
 EXPOSE 8081
 
-CMD apt-get update -y
-
 ENTRYPOINT ["java", "-Xmx2048M", "-jar", "/application.jar"]

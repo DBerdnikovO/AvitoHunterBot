@@ -39,6 +39,7 @@ services:
       POSTGRES_PASSWORD: "1122"
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
+      - ./infrastructure/db/create_db.sql:/docker-entrypoint-initdb.d/create_db.sql
       - ../2. Init Database:/docker-entrypoint-initdb.d
       - db-data:/var/lib/postgresql/data
     ports:
@@ -78,11 +79,15 @@ services:
     environment:
       - spring.application.name=avitohunter
       - spring.datasource.driver-class-name=org.postgresql.Driver
-      - spring.datasource.username=username
-      - spring.datasource.password=password
+      - spring.datasource.url=jdbc:postgresql://postgres:5432/avitoSearcher
+      - spring.datasource.username=USER
+      - spring.datasource.password=1122
+      - spring.jpa.hibernate.ddl-auto=update
       - bot.name=Avito_500_bot
       - bot.token=6810055517:AAGp96KsTdJKQFzU50_eEEt8OktKt2xIL8Q
       - server.port=8081
+    ports:
+      - "8081:8081"
     networks:
       - postgres
 
