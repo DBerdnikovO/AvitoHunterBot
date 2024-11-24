@@ -77,7 +77,7 @@ public class TaskServiceImpl implements TaskService {
 //                if (children.get(i).childNodeSize() > 3) {
 //                    continue;
 //                }
-                if (TimeFilter.ONE_MINUTE_AGO.equals(dateElement.text()) || TimeFilter.FEW_SECONDS_AGO.equals(dateElement.text())) {
+                if (TimeFilter.FIFTEEN_MINUTES_AGO.equals(dateElement.text()) ||TimeFilter.FOURTEEN_MINUTES_AGO.equals(dateElement.text()) ||TimeFilter.THIRTEEN_MINUTES_AGO.equals(dateElement.text())) {
                     String title = titleElement.text();
                     String price = prices.get(i).text();
                     String linkUrl = AVITO_BASE_URL + linkURL.get(i).select(values.title).attr(values.attr);
